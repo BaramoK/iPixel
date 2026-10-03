@@ -25,7 +25,8 @@ class TextTab(ttk.Frame):
         frame_text.pack(fill=tk.X, padx=10, pady=(10, 5))
 
         self.text_var = tk.StringVar()
-        self.text_entry = ttk.Entry(frame_text, textvariable=self.text_var, font=("Segoe UI", 12))
+        self.text_entry = tk.Entry(frame_text, textvariable=self.text_var, font=("Segoe UI", 12),
+                                   bg="white", fg="black", relief=tk.SOLID, bd=1)
         self.text_entry.pack(fill=tk.X, ipady=4)
 
         # Options
