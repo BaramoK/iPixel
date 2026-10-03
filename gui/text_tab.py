@@ -24,11 +24,18 @@ class TextTab(ttk.Frame):
         frame_text = ttk.LabelFrame(self, text=" Texte ", padding=10)
         frame_text.pack(fill=tk.X, padx=10, pady=(10, 5))
 
-        self.text_entry = tk.Text(frame_text, height=1, font=("Segoe UI", 12),
+        # Zone de texte (tk.Text pour supporter l'Unicode hors-BMP)
+        self.text_entry = tk.Text(frame_text, height=1, font=("Segoe UI Emoji", 12),
                                    bg="white", fg="black", relief=tk.SOLID, bd=1,
-                                   wrap=tk.NONE, undo=True)
-        self.text_entry.pack(fill=tk.X, ipady=2)
-        self.text_entry.bind("<Return>", lambda e: "break")  # empêche le retour à la ligne
+                                   wrap=tk.NONE, undo=True, padx=4, pady=2)
+        self.text_entry.pack(side=tk.LEFT, fill=tk.X, expand=True)
+        self.text_entry.bind("<Return>", lambda e: "break")        # bloque le retour à la ligne
+        self.text_entry.bind("<Control-v>", self._on_paste)        # collage Unicode robuste
+        self.text_entry.bind("<Control-V>", self._on_paste)
+
+        # Bouton sélecteur d'emojis
+        ttk.Button(frame_text, text="😀", width=3,
+                   command=self._open_emoji_picker).pack(side=tk.LEFT, padx=(4, 0))
 
         # Options
         opts = ttk.Frame(self)
@@ -139,6 +146,83 @@ class TextTab(ttk.Frame):
         """Remplace le contenu du widget Text."""
         self.text_entry.delete("1.0", tk.END)
         self.text_entry.insert("1.0", value)
+
+    # ------------------------------------------------------------------
+    # Collage Unicode + Emoji picker
+    # ------------------------------------------------------------------
+    def _on_paste(self, event=None):
+        """Colle le contenu du presse-papiers proprement (Unicode)."""
+        try:
+            text = self.clipboard_get()
+            self.text_entry.insert(tk.INSERT, text)
+            return "break"
+        except tk.TclError:
+            return "break"
+
+    _EMOJIS = {
+        "Smileys": "😀😃😄😁😆😅😂🤣😊😇🙂🙃😉😌😍🥰😘😗😙😚😋😛😝😜🤪🤨🧐🤓😎🥸🤩🥳😏😒😞😔😟😕🙁☹️😣😖😫😩🥺😢😭😤😠😡🤬🤯😳🥵🥶😱😨😰😥😓🤗🤔🤭🤫🤥😶😐😑😬🙄😯😦😧😮😲🥱😴🤤😪😵🤐🥴🤢🤮🤧😷🤒🤕🤑🤠😈👿👹👺🤡💩👻💀☠️👽👾🤖🎃😺😸😹😻😼😽🙀😿😾",
+        "Cœurs & symboles": "❤️🧡💛💚💙💜🖤🤍🤎💔❣️💕💞💓💗💖💘💝💟☮️✝️☪️🕉️☸️✡️🔯🕎☯️☦️🛐⛎♈♉♊♋♌♍♎♏♐♑♒♓🆔⚛️🉑☢️☣️📴📳🈶🈚🈸🈺🈷️✴️🆚💮🉐㊙️㊗️🈴🈵🈹🈲🅰️🅱️🆎🆑🅾️🆘❌⭕🛑⛔📛🚫💯💢♨️🚷🚯🚳🚱🔞📵🚭❗❕❓❔‼️⁉️🔅🔆〽️⚠️🚸🔱⚜️🔰♻️✅🈯💹❇️✳️❎🌐💠Ⓜ️🌀💤🏧🚾♿🅿️🈳🈂🛂🛃🛄🛅",
+        "Gestes & corps": "👍👎👊✊🤛🤜🤞✌️🤟🤘👌🤏👈👉👆👇☝️✋🤚🖐️🖖👋🤙💪🦾🖕✍️🙏🦶🦵🦿🦾💪👂🦻👃🧠🫀🫁🦷🦴👀👁️👅👄👶🧒👦👧🧑👱👨🧔👩🧓👴👵",
+        "Animaux": "🐶🐱🐭🐹🐰🦊🐻🐼🐨🐯🦁🐮🐷🐽🐸🐵🙈🙉🙊🐒🐔🐧🐦🐤🐣🐥🦆🦅🦉🦇🐺🐗🐴🦄🐝🐛🦋🐌🐞🐜🦟🦗🕷️🕸️🦂🐢🐍🦎🦖🦕🐙🦑🦐🦞🦀🐡🐠🐟🐬🐳🐋🦈🐊🐅🐆🦓🦍🦧🐘🦛🦏🐪🐫🦒🦘🐃🐂🐄🐎🐖🐏🐑🦙🐐🦌🐕🦮🐕‍🦺🐈🐈‍⬛🐓🦃🦚🦜🦢🦩🕊️🐇🦝🦨🦡🦦🦥🐁🐀🐿️🦔",
+        "Nourriture & boissons": "🍏🍎🍐🍊🍋🍌🍉🍇🍓🍈🍒🍑🍍🥝🥑🍅🍆🥒🥕🌽🌶️🥔🍠🥐🥖🍞🥨🥯🥞🧀🍖🍗🥩🥓🍔🍟🍕🌭🥪🌮🌯🥙🧆🥚🍳🥘🍲🥣🥗🍿🧈🧂🥫🍱🍘🍙🍚🍛🍜🍝🍠🍢🍣🍤🍥🍡🥟🥠🥡🦀🦞🦐🦑🍦🍧🍨🍩🍪🎂🍰🧁🥧🍫🍬🍭🍮🍯🍼🥛☕🫖🍵🍶🍾🍷🍸🍹🍺🍻🥂🥃🥤🧃🧉🧊",
+        "Objets & jeux": "⌚📱💻⌨️🖥️🖨️🖱️🖲️🕹️🗜️💽💾💿📀📼📷📸📹🎥📽️🎞️📞☎️📟📠📺📻🎙️🎚️🎛️🧭⏱️⏲️⏰🕰️⌛⏳📡🔋🔌💡🔦🕯️🗑️🛢️💸💵💴💶💷💰💳💎⚖️🛠️⛓️🔫💣🧱🔪🗡️⚔️🛡️🚬⚰️⚱️🏺🔮📿💊💉🩸🩹🩼🩺🌡️🧹🧺🧻🚽🚰🚿🛁🛀🧼🪥🪒🧽🪣🧴🛎️🔑🗝️🚪🪑🛋️🛏️🛌🧸🖼️🪞🪟🛍️🛒🎁🎈🎏🎀🪄🪅🎊🎉🎎🏆🎖️🎗️🎟️🎫🔮🪄🎮🕹️🎰🎲🧩🧸🪀🪁",
+    }
+
+    def _open_emoji_picker(self):
+        """Ouvre une popup avec une grille d'emojis cliquables."""
+        win = tk.Toplevel(self)
+        win.title("Sélecteur d'emojis")
+        win.transient(self.winfo_toplevel())
+        win.grab_set()
+        win.resizable(False, False)
+
+        # Centrer la fenêtre
+        win.update_idletasks()
+        w, h = 520, 400
+        root = self.winfo_toplevel()
+        x = root.winfo_x() + (root.winfo_width() // 2) - (w // 2)
+        y = root.winfo_y() + (root.winfo_height() // 2) - (h // 2)
+        win.geometry(f"{w}x{h}+{x}+{y}")
+
+        canvas = tk.Canvas(win)
+        scrollbar = ttk.Scrollbar(win, orient=tk.VERTICAL, command=canvas.yview)
+        scroll_frame = ttk.Frame(canvas)
+        scroll_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+        canvas.create_window((0, 0), window=scroll_frame, anchor=tk.NW)
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=5, pady=5)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+        row = 0
+        for category, emojis in self._EMOJIS.items():
+            ttk.Label(scroll_frame, text=category,
+                      font=("Segoe UI Emoji", 10, "bold")).grid(
+                          row=row, column=0, sticky=tk.W,
+                          padx=5, pady=(12, 4), columnspan=8)
+            row += 1
+            col = 0
+            for emoji in emojis:
+                btn = tk.Button(scroll_frame, text=emoji,
+                                font=("Segoe UI Emoji", 14), width=2,
+                                relief=tk.FLAT, cursor="hand2",
+                                command=lambda e=emoji: self._insert_emoji(e))
+                btn.grid(row=row, column=col, padx=1, pady=1)
+                col += 1
+                if col >= 8:
+                    col = 0
+                    row += 1
+            row += 1
+
+        ttk.Button(win, text="Fermer", command=win.destroy).pack(pady=8)
+
+    def _insert_emoji(self, emoji):
+        """Insère un emoji dans le champ texte."""
+        self.text_entry.insert(tk.INSERT, emoji)
+        self.text_entry.focus_set()
 
     def _clear(self):
         self._set_text("")
