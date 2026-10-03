@@ -50,8 +50,8 @@ Avec iPixel, tu peux envoyer des images, afficher du texte animé, régler la lu
 ## 🚀 Installation
 
 ```bash
-git clone https://github.com/BaramoK/iPixel.git
-cd iPixel
+git clone https://github.com/BaramoK/iPixel-UI-Manager.git
+cd iPixel-UI-Manager
 python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
@@ -103,7 +103,7 @@ python app.py
 ## 🏗️ Architecture
 
 ```
-iPixel/
+iPixel-UI-Manager/
 ├── app.py                  → Point d'entrée (TkinterDnD.Tk)
 ├── requirements.txt        → Dépendances
 ├── config.json             → Configuration & persistance utilisateur

@@ -1,4 +1,4 @@
-"""Point d'entrée de l'application iPixel LED Controller."""
+"""Point d'entrée de l'application iPixel UI Manager."""
 from tkinterdnd2 import TkinterDnD
 
 from gui.main_window import MainWindow
@@ -6,7 +6,7 @@ from gui.main_window import MainWindow
 
 def main():
     root = TkinterDnD.Tk()
-    root.title("iPixel LED Controller")
+    root.title("iPixel UI Manager")
     root.geometry("900x650")
     root.minsize(700, 500)
 

@@ -1,4 +1,4 @@
-"""Fenêtre principale iPixel LED Controller."""
+"""Fenêtre principale iPixel UI Manager."""
 import tkinter as tk
 from tkinter import ttk, messagebox
 
