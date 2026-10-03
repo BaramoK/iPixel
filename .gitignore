@@ -17,6 +17,7 @@ dist/
 
 # Fichiers générés par PyInstaller
 *.spec
+!iPixel-UI-Manager.spec
 
 # Données locales de l'application (optionnel – à publier si tu le souhaites)
 # history.json
