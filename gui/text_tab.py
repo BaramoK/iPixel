@@ -25,7 +25,7 @@ class TextTab(ttk.Frame):
         frame_text.pack(fill=tk.X, padx=10, pady=(10, 5))
 
         # Zone de texte (tk.Text pour supporter l'Unicode hors-BMP)
-        self.text_entry = tk.Text(frame_text, height=1, font=("Segoe UI Emoji", 12),
+        self.text_entry = tk.Text(frame_text, height=1, font=("Segoe UI", 12),
                                    bg="white", fg="black", relief=tk.SOLID, bd=1,
                                    wrap=tk.NONE, undo=True, padx=4, pady=2)
         self.text_entry.pack(side=tk.LEFT, fill=tk.X, expand=True)
@@ -200,7 +200,7 @@ class TextTab(ttk.Frame):
         row = 0
         for category, emojis in self._EMOJIS.items():
             ttk.Label(scroll_frame, text=category,
-                      font=("Segoe UI Emoji", 10, "bold")).grid(
+                      font=("Segoe UI", 10, "bold")).grid(
                           row=row, column=0, sticky=tk.W,
                           padx=5, pady=(12, 4), columnspan=8)
             row += 1
