@@ -148,6 +148,16 @@ iPixel/
 
 ---
 
+## 🙏 Remerciements
+
+Ce projet ne serait pas possible sans l'excellent travail de [**Eliav Louski**](https://github.com/Eliav2) et sa librairie [**`pypixelcolor`**](https://github.com/Eliav2/pypixelcolor) qui fournit toute la couche de communication Bluetooth Low Energy avec les panneaux LED Divoom.
+
+Un grand merci également aux contributeurs de :
+- [`tkinterdnd2`](https://github.com/Eliav2/tkinterdnd2) — pour le support du glisser-déposer natif sous Windows
+- [`Pillow`](https://python-pillow.org/) — pour le traitement et l'aperçu des images
+
+---
+
 ## 📄 Licence
 
 Ce projet est sous licence MIT.
