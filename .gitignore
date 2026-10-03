@@ -1,0 +1,29 @@
+# Environnement virtuel Python
+.venv/
+venv/
+env/
+ENV/
+
+# Cache Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Build / Distribution
+build/
+dist/
+*.egg-info/
+
+# Fichiers générés par PyInstaller
+*.spec
+
+# Données locales de l'application (optionnel – à publier si tu le souhaites)
+# history.json
+# config.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

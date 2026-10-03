@@ -1,0 +1,50 @@
+[
+  {
+    "id": "a25558864a87",
+    "timestamp": "2026-10-03 18:33:03",
+    "type": "image",
+    "label": "tetris.gif",
+    "status": "success",
+    "data": {
+      "path": "C:/Users/BaramoK/AppData/Roaming/Elgato/StreamDeck/IconPacks/com.vivremotion.gifcollection.sdIconPack/icons/tetris.gif",
+      "resize_method": "FIT",
+      "slot": 0
+    }
+  },
+  {
+    "id": "72e26fb7fa7a",
+    "timestamp": "2026-10-03 19:12:46",
+    "type": "image",
+    "label": "shark.gif",
+    "status": "success",
+    "data": {
+      "path": "C:/Users/BaramoK/AppData/Roaming/Elgato/StreamDeck/IconPacks/com.vivremotion.gifcollection.sdIconPack/icons/shark.gif",
+      "resize_method": "FIT",
+      "slot": 0
+    }
+  },
+  {
+    "id": "32b5465a3d40",
+    "timestamp": "2026-10-03 19:13:00",
+    "type": "image",
+    "label": "vertical_lines.gif",
+    "status": "success",
+    "data": {
+      "path": "C:/Users/BaramoK/AppData/Roaming/Elgato/StreamDeck/IconPacks/com.vivremotion.gifcollection.sdIconPack/icons/vertical_lines.gif",
+      "resize_method": "FIT",
+      "slot": 0
+    }
+  },
+  {
+    "id": "391058b9a805",
+    "timestamp": "2026-10-03 19:20:24",
+    "type": "image",
+    "label": "pong.gif",
+    "status": "success",
+    "data": {
+      "path": "C:/Users/BaramoK/AppData/Roaming/Elgato/StreamDeck/IconPacks/com.vivremotion.gifcollection.sdIconPack/icons/pong.gif",
+      "resize_method": "FIT",
+      "slot": 0
+    }
+  }
+]
