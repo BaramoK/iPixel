@@ -24,10 +24,11 @@ class TextTab(ttk.Frame):
         frame_text = ttk.LabelFrame(self, text=" Texte ", padding=10)
         frame_text.pack(fill=tk.X, padx=10, pady=(10, 5))
 
-        self.text_var = tk.StringVar()
-        self.text_entry = tk.Entry(frame_text, textvariable=self.text_var, font=("Segoe UI", 12),
-                                   bg="white", fg="black", relief=tk.SOLID, bd=1)
-        self.text_entry.pack(fill=tk.X, ipady=4)
+        self.text_entry = tk.Text(frame_text, height=1, font=("Segoe UI", 12),
+                                   bg="white", fg="black", relief=tk.SOLID, bd=1,
+                                   wrap=tk.NONE, undo=True)
+        self.text_entry.pack(fill=tk.X, ipady=2)
+        self.text_entry.bind("<Return>", lambda e: "break")  # empêche le retour à la ligne
 
         # Options
         opts = ttk.Frame(self)
@@ -127,12 +128,24 @@ class TextTab(ttk.Frame):
     def _default_font(self):
         return "UNIFONT"
 
+    # ------------------------------------------------------------------
+    # Helpers texte
+    # ------------------------------------------------------------------
+    def _get_text(self):
+        """Récupère le contenu du widget Text (sans le \\n final)."""
+        return self.text_entry.get("1.0", "end-1c")
+
+    def _set_text(self, value):
+        """Remplace le contenu du widget Text."""
+        self.text_entry.delete("1.0", tk.END)
+        self.text_entry.insert("1.0", value)
+
     def _clear(self):
-        self.text_var.set("")
+        self._set_text("")
         self.on_status("Texte effacé")
 
     def _on_send(self):
-        text = self.text_var.get().strip()
+        text = self._get_text().strip()
         if not text:
             messagebox.showinfo("Information", "Veuillez saisir un texte.")
             return
@@ -203,7 +216,7 @@ class TextTab(ttk.Frame):
     # Config persistence
     # ------------------------------------------------------------------
     def _load_config(self):
-        self.text_var.set(self.config.get("last_text", ""))
+        self._set_text(self.config.get("last_text", ""))
         self.color_var.set(self.config.get("text_color", "00ff00"))
         self.bg_var.set(self.config.get("text_bg_color", "000000"))
         self.anim_var.set(self.config.get("text_animation", "SCROLL_LEFT"))
@@ -213,7 +226,7 @@ class TextTab(ttk.Frame):
         self.font_size_var.set(self.config.get("text_font_size", 16))
 
     def _save_config(self):
-        self.config["last_text"] = self.text_var.get()
+        self.config["last_text"] = self._get_text()
         self.config["text_color"] = self.color_var.get()
         self.config["text_bg_color"] = self.bg_var.get()
         self.config["text_animation"] = self.anim_var.get()
@@ -224,7 +237,7 @@ class TextTab(ttk.Frame):
 
     def populate_from_data(self, data: dict):
         """Pré-remplit l'onglet avec les données d'un historique."""
-        self.text_var.set(data.get("text", ""))
+        self._set_text(data.get("text", ""))
         self.color_var.set(data.get("color", "00ff00"))
         self.bg_var.set(data.get("bg_color", "000000"))
         self.anim_var.set(data.get("animation", "SCROLL_LEFT"))
