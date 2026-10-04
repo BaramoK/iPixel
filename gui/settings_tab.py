@@ -75,6 +75,13 @@ class SettingsTab(ttk.Frame):
 
         ttk.Button(slot_frame, text="▶ Afficher slot", command=self._show_slot).grid(row=1, column=0, columnspan=2, sticky=tk.EW, pady=(8, 4))
         ttk.Button(slot_frame, text="🗑️ Supprimer slot", command=self._delete_slot).grid(row=2, column=0, columnspan=2, sticky=tk.EW)
+        ttk.Label(
+            slot_frame,
+            text="ℹ Si un texte défile, le changement de slot sera effectif à la fin du cycle.",
+            wraplength=250,
+            foreground="gray",
+            font=("", 8, "italic"),
+        ).grid(row=3, column=0, columnspan=2, sticky=tk.W, pady=(4, 0))
 
         danger_frame = ttk.LabelFrame(right, text=" Danger Zone ", padding=10)
         danger_frame.pack(fill=tk.X, pady=(10, 0))
@@ -147,11 +154,30 @@ class SettingsTab(ttk.Frame):
 
     def _show_slot(self):
         slot = self.slot_num.get()
-        self._run_task(
-            lambda: self.controller.show_slot(slot),
-            f"Affichage du slot {slot}…",
-            f"Slot {slot} affiché.",
-        )
+        if not self._ensure_connected():
+            return
+        self.on_status(f"Affichage du slot {slot}…", busy=True)
+
+        def task():
+            try:
+                self.controller.show_slot(slot)
+                return None
+            except Exception as e:
+                return e
+
+        def on_done(future):
+            err = future.result()
+            if err:
+                self.on_status(f"Erreur : {err}", error=True)
+                messagebox.showerror("Erreur", str(err))
+            else:
+                self.on_status(
+                    f"Slot {slot} affiché. Si un texte défile, le changement sera effectif à la fin du cycle."
+                )
+                self._save_config()
+
+        fut = self.controller.submit(task)
+        fut.add_done_callback(lambda f: self.after(0, lambda: on_done(f)))
 
     def _delete_slot(self):
         slot = self.slot_num.get()
