@@ -1,4 +1,4 @@
-﻿<div align="center">
+<div align="center">
 
 # 🎨 iPixel LED Controller
 
@@ -111,6 +111,9 @@ iPixel-UI-Manager/
 ├── config.json             → Configuration & persistance utilisateur
 ├── config_manager.py       → Gestionnaire JSON thread-safe
 ├── led_client.py           → Wrapper pypixelcolor + ThreadPoolExecutor
+├── assets/
+│   ├── app_icon.ico        → Icône panneau LED personnalisée (6 résolutions)
+│   └── create_icon.py      → Générateur / modificateur de l'icône
 └── gui/
     ├── __init__.py
     ├── main_window.py      → Fenêtre principale + connexion BLE + scan
