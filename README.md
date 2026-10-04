@@ -16,9 +16,11 @@
 
 ## 📖 Description
 
-**iPixel** est une interface graphique intuitive qui te permet de contrôler des panneaux LED compatibles [`pypixelcolor`](https://github.com/Eliav2/pypixelcolor) (Divoom Pixoo, Timoo, et autres) **depuis ton PC Windows** via Bluetooth Low Energy.
+**iPixel** est une interface graphique intuitive qui te permet de contrôler des panneaux LED compatibles [`pypixelcolor`](https://github.com/lucagoc/pypixelcolor) (Divoom Pixoo, Timoo, et autres) **depuis ton PC Windows** via Bluetooth Low Energy.
 
 Avec iPixel, tu peux envoyer des images, afficher du texte animé, régler la luminosité, configurer l'horloge, et bien plus — le tout depuis une application desktop moderne avec support du **glisser-déposer** natif.
+
+💡 **Note sur les slots** : le rappel de slot (`show_slot`) intègre un workaround pour un bug du payload BLE upstream — le changement s'effectuera à la fin du cycle si du texte défile.
 
 ---
 
@@ -57,7 +59,7 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-> **Note** : `pypixelcolor` doit être disponible dans ton environnement. Si ce n'est pas le cas, consulte la [documentation officielle](https://github.com/Eliav2/pypixelcolor).
+> **Note** : `pypixelcolor` doit être disponible dans ton environnement. Si ce n'est pas le cas, consulte la [documentation officielle](https://github.com/lucagoc/pypixelcolor).
 
 ---
 
@@ -150,7 +152,7 @@ iPixel-UI-Manager/
 
 ## 🙏 Remerciements
 
-Ce projet ne serait pas possible sans l'excellent travail de [**Eliav Louski**](https://github.com/Eliav2) et sa librairie [**`pypixelcolor`**](https://github.com/Eliav2/pypixelcolor) qui fournit toute la couche de communication Bluetooth Low Energy avec les panneaux LED Divoom.
+Ce projet ne serait pas possible sans l'excellent travail de [**lucagoc**](https://github.com/lucagoc) et sa librairie [**`pypixelcolor`**](https://github.com/lucagoc/pypixelcolor) qui fournit toute la couche de communication Bluetooth Low Energy avec les panneaux LED Divoom.
 
 Un grand merci également aux contributeurs de :
 - [`tkinterdnd2`](https://github.com/Eliav2/tkinterdnd2) — pour le support du glisser-déposer natif sous Windows
