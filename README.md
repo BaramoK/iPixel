@@ -8,7 +8,7 @@
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010%2F11-0078D6?logo=windows)](https://microsoft.com/windows)
 [![BLE](https://img.shields.io/badge/Bluetooth%20LE-Enabled-0082FC?logo=bluetooth)](https://bluetooth.com)
 
-[📥 Installation](#-installation) • [🚀 Utilisation](#-utilisation) • [⚙️ Fonctionnalités](#%EF%B8%8F-fonctionnalités)
+[📥 Installation](#-installation) • [📦 Exécutable](#-exécutable-autonome) • [🏗️ Build](#%EF%B8%8F-build) • [🚀 Utilisation](#-utilisation) • [⚙️ Fonctionnalités](#%EF%B8%8F-fonctionnalités)
 
 </div>
 
@@ -49,7 +49,20 @@ Avec iPixel, tu peux envoyer des images, afficher du texte animé, régler la lu
 
 ---
 
-## 🚀 Installation
+## 📦 Exécutable autonome (recommandé)
+
+Pour les utilisateurs qui souhaitent simplement lancer l'application **sans installer Python ni aucune dépendance** :
+
+1. Télécharge **`iPixel-UI-Manager.exe`** depuis la [page Releases](https://github.com/BaramoK/iPixel-UI-Manager/releases).
+2. Double-clique pour lancer — aucune installation requise.
+
+> **💡 Zéro dépendance** : l'exe embarque Python, `pypixelcolor`, `bleak`, `Pillow` et `tkinterdnd2` dans un seul fichier (~22 Mo).
+
+---
+
+## 📥 Installation (mode développeur)
+
+Si tu préfères exécuter le projet depuis les sources ou contribuer au code :
 
 ```bash
 git clone https://github.com/BaramoK/iPixel-UI-Manager.git
@@ -59,7 +72,30 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-> **Note** : `pypixelcolor` doit être disponible dans ton environnement. Si ce n'est pas le cas, consulte la [documentation officielle](https://github.com/lucagoc/pypixelcolor).
+> **Note** : en mode source, `pypixelcolor` doit être disponible dans ton environnement. Si ce n'est pas le cas, consulte la [documentation officielle](https://github.com/lucagoc/pypixelcolor).
+
+---
+
+## 🏗️ Build
+
+Pour générer toi-même l'exécutable autonome (`--onefile`) depuis les sources :
+
+```bash
+pyinstaller --clean --noconfirm iPixel-UI-Manager.spec
+```
+
+Le fichier **`dist/iPixel-UI-Manager.exe`** est alors produit. Il contient :
+
+| Composant | Statut |
+|-----------|--------|
+| `pypixelcolor` (librairie + polices) | ✅ embarqué |
+| `bleak` (+ bindings WinRT natifs) | ✅ embarqué |
+| `Pillow` (extensions C) | ✅ embarqué |
+| `tkinterdnd2` (+ DLLs) | ✅ embarqué |
+| `tkinter` / Tcl-Tk | ✅ embarqué |
+| Icônes, config, assets | ✅ embarqués |
+
+> **ProTip** : le flag `--clean` évite d'éventuels résidus d'un build précédent.
 
 ---
 
@@ -107,6 +143,7 @@ python app.py
 ```
 iPixel-UI-Manager/
 ├── app.py                  → Point d'entrée (TkinterDnD.Tk)
+├── iPixel-UI-Manager.spec  → Configuration PyInstaller (build --onefile)
 ├── requirements.txt        → Dépendances
 ├── config.json             → Configuration & persistance utilisateur
 ├── config_manager.py       → Gestionnaire JSON thread-safe
@@ -140,8 +177,12 @@ iPixel-UI-Manager/
 | Package | Version | Rôle |
 |---------|---------|------|
 | `pypixelcolor` | *(préinstallé)* | Communication BLE avec le panneau LED |
+| `bleak` | 0.22+ | Layer BLE cross-platform |
 | `tkinterdnd2` | ≥ 0.6.0 | Glisser-déposer natif Windows |
 | `Pillow` | ≥ 9.0.0 | Aperçu et traitement d'images |
+| `PyInstaller` | ≥ 6.0 | Build de l'exécutable autonome |
+
+> En mode **exécutable autonome**, ces dépendances sont intégrées dans le `.exe` via PyInstaller — l'utilisateur final n'a aucun package à installer.
 
 ---
 
