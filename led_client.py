@@ -1,7 +1,30 @@
 """Wrapper thread-safe autour de pypixelcolor.Client."""
+import logging
 from concurrent.futures import ThreadPoolExecutor
 from pypixelcolor import Client, TextAnimation, ResizeMethod, scan_devices_sync
 from pypixelcolor.lib.font_config import FontConfig
+from pypixelcolor.lib.transport.send_plan import single_window_plan
+
+_logger = logging.getLogger(__name__)
+
+
+def _build_show_slot_raw(number: int, cmd_type: int = 0x01):
+    """Construit manuellement le payload show_slot avec un type alternatif.
+
+    Le package pypixelcolor envoie ``(8, 0x80)`` ce qui semble incohérent
+    avec ``delete`` qui utilise ``(2, 1)``.  Cette fonction permet de tester
+    ``(8, 1)`` en secours.
+    """
+    cmd = bytes([
+        0x07,
+        0x00,
+        0x08,
+        int(cmd_type) & 0xFF,
+        0x01,
+        0x00,
+        int(number) & 0xFF,
+    ])
+    return single_window_plan("show_slot_raw", cmd)
 
 
 class LEDController:
@@ -122,7 +145,32 @@ class LEDController:
     def show_slot(self, slot: int):
         if not self.client:
             raise RuntimeError("Non connecté au panneau.")
-        self.client.show_slot(slot)
+
+        # --- tentative 1 : commande officielle du package -----------------
+        try:
+            self.client.show_slot(slot)
+            _logger.debug("show_slot(%d) succeeded via pypixelcolor official command", slot)
+            return
+        except Exception as exc_official:  # noqa: BLE001
+            _logger.warning(
+                "show_slot(%d) failed with official payload (0x08 0x80): %s", slot, exc_official
+            )
+
+        # --- tentative 2 : payload corrigé (type=0x01 comme delete) -------
+        async def _exec_raw():
+            session = self.client._async_client._session
+            return await session.execute_command(_build_show_slot_raw, slot)
+
+        try:
+            self.client._run_async(_exec_raw())
+            _logger.info("show_slot(%d) succeeded with raw corrected payload (0x08 0x01)", slot)
+        except Exception as exc_raw:  # noqa: BLE001
+            _logger.error(
+                "show_slot(%d) also failed with raw corrected payload: %s", slot, exc_raw
+            )
+            raise RuntimeError(
+                f"Impossible d'afficher le slot {slot} (protocole non reconnu par le panneau)."
+            ) from exc_raw
 
     def delete(self, slot: int):
         if not self.client:
