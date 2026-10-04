@@ -44,15 +44,6 @@ project_datas = [
     (os.path.join(project_root, 'assets', 'app_icon.ico'), 'assets'),
 ]
 
-# Le dossier gui/ : on inclut tous les fichiers .py individuellement
-# pour qu'ils soient copiés même s'ils sont dans les hiddenimports
-gui_dir = os.path.join(project_root, 'gui')
-if os.path.isdir(gui_dir):
-    for entry in os.listdir(gui_dir):
-        if entry.endswith('.py'):
-            src = os.path.join(gui_dir, entry)
-            pypixel_datas.append((src, 'gui'))
-
 all_datas = tkdnd_datas + pypixel_datas + project_datas
 
 block_cipher = None
@@ -78,6 +69,12 @@ a = Analysis(
         'pypixelcolor.commands.send_text.encoding',
         'pypixelcolor.commands.send_text.color_utils',
         'pypixelcolor.lib.emoji_manager',
+        'PIL',
+        'PIL.Image',
+        'PIL.ImageTk',
+        'PIL.ImageDraw',
+        'PIL.ImageFont',
+        'PIL.ImageFilter',
         'bleak',
         'bleak.backends',
         'bleak.backends.winrt',
@@ -97,13 +94,15 @@ pyz = PYZ(a.pure)
 exe = EXE(
     pyz,
     a.scripts,
+    a.binaries,
+    a.datas,
+    a.zipfiles,
     [],
-    exclude_binaries=True,
     name='iPixel-UI-Manager',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
-    upx=True,
+    upx=False,
     console=False,
     disable_windowed_traceback=False,
     argv_emulation=False,
@@ -111,15 +110,4 @@ exe = EXE(
     codesign_identity=None,
     entitlements_file=None,
     icon=os.path.join(project_root, 'assets', 'app_icon.ico'),
-)
-
-coll = COLLECT(
-    exe,
-    a.binaries,
-    a.zipfiles,
-    a.datas,
-    strip=False,
-    upx=True,
-    upx_exclude=[],
-    name='iPixel-UI-Manager',
 )
