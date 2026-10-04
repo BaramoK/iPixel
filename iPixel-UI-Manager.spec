@@ -41,6 +41,7 @@ if pypixel_spec and pypixel_spec.origin:
 project_datas = [
     (os.path.join(project_root, 'config.json'), '.'),
     (os.path.join(project_root, 'history.json'), '.'),
+    (os.path.join(project_root, 'assets', 'app_icon.ico'), 'assets'),
 ]
 
 # Le dossier gui/ : on inclut tous les fichiers .py individuellement
@@ -109,7 +110,7 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=None,
+    icon=os.path.join(project_root, 'assets', 'app_icon.ico'),
 )
 
 coll = COLLECT(
