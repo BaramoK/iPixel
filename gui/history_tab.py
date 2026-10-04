@@ -175,7 +175,7 @@ class HistoryTab(ttk.Frame):
         if font_path and os.path.isfile(font_path):
             font = FontConfig.from_file(font_path, font_size=size)
         else:
-            font = FontConfig.default(font_size=size)
+            font = "UNIFONT"
         self.controller.send_text(
             data.get("text", ""), animation=animation, speed=speed,
             color=color, bg_color=bg_color, save_slot=save_slot, font=font,

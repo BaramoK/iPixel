@@ -2,13 +2,22 @@
 
 import sys
 import os
-from PyInstaller.utils.hooks import collect_data_files, collect_dynamic_libs
+from PyInstaller.utils.hooks import collect_data_files
 
-# Chemin du projet
-project_root = r"C:\Users\BaramoK\Documents\Git\iPixel"
+# Chemin du projet (dossier contenant ce fichier .spec)
+project_root = os.path.abspath(SPECPATH)
 
 # Collecte automatique des fichiers données de tkinterdnd2
 tkdnd_datas = collect_data_files('tkinterdnd2')
+
+# Fichiers de données statiques du projet
+project_datas = [
+    (os.path.join(project_root, 'config.json'), '.'),
+    (os.path.join(project_root, 'history.json'), '.'),
+    (os.path.join(project_root, 'gui'), 'gui'),
+]
+
+all_datas = tkdnd_datas + project_datas
 
 block_cipher = None
 
@@ -16,7 +25,7 @@ a = Analysis(
     [os.path.join(project_root, 'app.py')],
     pathex=[project_root],
     binaries=[],
-    datas=tkdnd_datas,
+    datas=all_datas,
     hiddenimports=[
         'gui',
         'gui.main_window',

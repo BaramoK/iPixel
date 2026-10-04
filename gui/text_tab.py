@@ -52,7 +52,7 @@ class TextTab(ttk.Frame):
         ttk.Button(col_frame, text="🎨", width=3, command=lambda: self._pick_color(self.color_var)).grid(row=0, column=2)
 
         ttk.Label(col_frame, text="Fond (hex)").grid(row=1, column=0, sticky=tk.W, pady=(8, 0))
-        self.bg_var = tk.StringVar(value="000000")
+        self.bg_var = tk.StringVar(value="")
         self.bg_entry = ttk.Entry(col_frame, textvariable=self.bg_var, width=10)
         self.bg_entry.grid(row=1, column=1, padx=4, pady=(8, 0))
         ttk.Button(col_frame, text="🎨", width=3, command=lambda: self._pick_color(self.bg_var)).grid(row=1, column=2, pady=(8, 0))
@@ -249,7 +249,7 @@ class TextTab(ttk.Frame):
         size = self.font_size_var.get()
 
         if font_path == self._default_font() or not font_path:
-            font = FontConfig.default(font_size=size)
+            font = self._default_font()
         else:
             font = FontConfig.from_file(font_path, font_size=size)
 
