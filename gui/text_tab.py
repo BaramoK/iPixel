@@ -244,7 +244,9 @@ class TextTab(ttk.Frame):
         speed = self.speed_var.get()
         color = self.color_var.get().strip().lstrip("#")
         bg = self.bg_var.get().strip().lstrip("#")
+        bg = bg if bg else None       # évite de passer "" à pypixelcolor → ValueError
         slot = self.slot_var.get() or None
+        slot = slot if slot else None
         font_path = self.font_path_var.get().strip() or None
         size = self.font_size_var.get()
 
