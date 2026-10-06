@@ -1,15 +1,19 @@
 {
   "mac_address": "37:67:1D:95:EE:80",
-  "last_text": "(●◡●)",
+  "last_text": "👽",
   "image_resize": "FIT",
-  "image_slot": 0,
+  "image_slot": 2,
   "text_color": "00ff00",
   "text_bg_color": "000000",
-  "text_animation": "SCROLL_LEFT",
+  "text_animation": "STATIC",
   "text_speed": 50,
-  "text_slot": 0,
+  "text_slot": 97,
   "text_font_path": "UNIFONT",
   "text_font_size": 8,
   "brightness": 30,
-  "orientation": 0
+  "orientation": 0,
+  "clock_style": 8,
+  "clock_24h": true,
+  "clock_date": false,
+  "exit_clock_slot": 100
 }
