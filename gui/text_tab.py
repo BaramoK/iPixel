@@ -98,7 +98,7 @@ class TextTab(ttk.Frame):
 
         ttk.Label(slot_frame, text="Slot").grid(row=0, column=0, sticky=tk.W)
         self.slot_var = tk.IntVar(value=0)
-        ttk.Spinbox(slot_frame, from_=0, to_=20, textvariable=self.slot_var, width=10).grid(row=0, column=1, padx=4)
+        ttk.Spinbox(slot_frame, from_=0, to_=99, textvariable=self.slot_var, width=10).grid(row=0, column=1, padx=4)
 
         btn_frame = ttk.Frame(self)
         btn_frame.pack(fill=tk.X, padx=10, pady=10)

@@ -72,7 +72,7 @@ class SettingsTab(ttk.Frame):
 
         ttk.Label(slot_frame, text="Numéro slot").grid(row=0, column=0, sticky=tk.W)
         self.slot_num = tk.IntVar(value=1)
-        ttk.Spinbox(slot_frame, from_=1, to_=20, textvariable=self.slot_num, width=8).grid(row=0, column=1, padx=4)
+        ttk.Spinbox(slot_frame, from_=1, to_=99, textvariable=self.slot_num, width=8).grid(row=0, column=1, padx=4)
 
         ttk.Button(slot_frame, text="▶ Afficher slot", command=self._show_slot).grid(row=1, column=0, columnspan=2, sticky=tk.EW, pady=(8, 4))
         ttk.Button(slot_frame, text="🗑️ Supprimer slot", command=self._delete_slot).grid(row=2, column=0, columnspan=2, sticky=tk.EW)
@@ -144,9 +144,9 @@ class SettingsTab(ttk.Frame):
     def _toggle_clock(self):
         if self.controller.is_clock_mode():
             self._run_task(
-                lambda: self.controller.restore_last_content(),
-                "Restauration du contenu…",
-                "Horloge désactivée – contenu précédent restauré.",
+                lambda: self.controller.exit_clock_mode(),
+                "Sortie du mode horloge…",
+                "Horloge désactivée – retour au contenu personnalisé.",
             )
         else:
             kwargs = {

@@ -27,6 +27,7 @@ DEFAULT_CONFIG = {
     "clock_style": 1,
     "clock_24h": True,
     "clock_date": True,
+    "exit_clock_slot": 100,
 }
 
 

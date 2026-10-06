@@ -17,7 +17,10 @@ class MainWindow(tk.Frame):
         super().__init__(root)
         self.root = root
         self.config = load_config()
-        self.controller = LEDController(address=self.config.get("mac_address"))
+        self.controller = LEDController(
+            address=self.config.get("mac_address"),
+            exit_clock_slot=self.config.get("exit_clock_slot", 100),
+        )
         self._build_ui()
         self.settings_tab.refresh_clock_state()
         self._update_status("Déconnecté")

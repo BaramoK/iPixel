@@ -7,6 +7,19 @@ from pypixelcolor.lib.transport.send_plan import single_window_plan
 
 _logger = logging.getLogger(__name__)
 
+# ---------------------------------------------------------------------------
+# Sortie du mode horloge
+# ---------------------------------------------------------------------------
+# La librairie pypixelcolor n'expose aucune commande de changement de canal.
+# En revanche, l'enregistrement d'un contenu dans un slot force le firmware à
+# quitter le canal horloge et à revenir au canal personnalisé (image/texte).
+# On utilise donc un slot dédié et réservé (100 par défaut) que l'on vide juste
+# après ; les slots de contenu sont limités à 99 pour éviter toute collision.
+EXIT_CLOCK_SLOT = 100
+# Texte minimal écrit dans le slot de sortie : son unique rôle est de déclencher
+# la sortie du canal horloge ; le slot est vidé immédiatement après.
+EXIT_CLOCK_TEXT = " "
+
 
 def _build_show_slot_raw(number: int, cmd_type: int = 0x01):
     """Construit manuellement le payload show_slot avec un type alternatif.
@@ -30,12 +43,13 @@ def _build_show_slot_raw(number: int, cmd_type: int = 0x01):
 class LEDController:
     """Encapsule pypixelcolor.Client avec un executor pour éviter de bloquer le GUI."""
 
-    def __init__(self, address: str | None = None):
+    def __init__(self, address: str | None = None, exit_clock_slot: int = EXIT_CLOCK_SLOT):
         self.address = address
         self.client = None
         self._executor = ThreadPoolExecutor(max_workers=1)
         self._clock_mode = False
         self._last_content_state = None
+        self.exit_clock_slot = exit_clock_slot
 
     # ------------------------------------------------------------------
     # Connexion
@@ -188,6 +202,39 @@ class LEDController:
             )
         elif content_type == "show_slot":
             self.show_slot(state["slot"])
+        self._clock_mode = False
+
+    def exit_clock_mode(self):
+        """Sort du mode horloge et revient à l'affichage personnalisé.
+
+        La librairie ``pypixelcolor`` n'expose aucune commande de changement de
+        canal. En revanche, enregistrer un contenu dans un slot force le
+        firmware à quitter le canal horloge et à réafficher le canal
+        personnalisé : on écrit donc le texte de sortie dans le slot dédié
+        (``self.exit_clock_slot``, 100 par défaut), on vide ce slot, puis on
+        réaffiche le dernier contenu temporaire connu, le cas échéant.
+        """
+        if not self.client:
+            raise RuntimeError("Non connecté au panneau.")
+
+        slot = self.exit_clock_slot
+
+        # 1) Écrire le texte de sortie dans le slot dédié : cette écriture force
+        #    le firmware à quitter le canal horloge.
+        self.send_text(EXIT_CLOCK_TEXT, save_slot=slot)
+
+        # 2) Vider le slot de sortie : il ne sert qu'à déclencher la sortie.
+        try:
+            self.delete(slot)
+        except Exception as exc:  # noqa: BLE001
+            _logger.warning("Nettoyage du slot de sortie %d échoué : %s", slot, exc)
+
+        # 3) Réafficher le dernier contenu temporaire connu (best effort).
+        try:
+            self.restore_last_content()
+        except Exception as exc:  # noqa: BLE001
+            _logger.warning("Restauration du contenu après sortie d'horloge échouée : %s", exc)
+
         self._clock_mode = False
 
     def set_time(self, **kwargs):
