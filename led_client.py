@@ -34,6 +34,8 @@ class LEDController:
         self.address = address
         self.client = None
         self._executor = ThreadPoolExecutor(max_workers=1)
+        self._clock_mode = False
+        self._last_content_state = None
 
     # ------------------------------------------------------------------
     # Connexion
@@ -73,6 +75,10 @@ class LEDController:
         if save_slot is not None and save_slot > 0:
             kwargs["save_slot"] = save_slot
         self.client.send_image(path, **kwargs)
+        # Mémorise uniquement les contenus temporaires (non sauvegardés en slot)
+        if save_slot is None or save_slot <= 0:
+            self._last_content_state = {"type": "image", "path": path, "resize_method": resize_method}
+            self._clock_mode = False
 
     def send_text(
         self,
@@ -100,6 +106,17 @@ class LEDController:
         if font is not None:
             kwargs["font"] = font
         self.client.send_text(text, **kwargs)
+        if save_slot is None or save_slot <= 0:
+            self._last_content_state = {
+                "type": "text",
+                "text": text,
+                "animation": animation,
+                "speed": speed,
+                "color": color,
+                "bg_color": bg_color,
+                "font": font,
+            }
+            self._clock_mode = False
 
     def send_image_hex(self, hex_string: str, file_extension: str, resize_method=None, save_slot: int | None = None):
         if not self.client:
@@ -110,6 +127,14 @@ class LEDController:
         if save_slot is not None and save_slot > 0:
             kwargs["save_slot"] = save_slot
         self.client.send_image_hex(**kwargs)
+        if save_slot is None or save_slot <= 0:
+            self._last_content_state = {
+                "type": "image_hex",
+                "hex_string": hex_string,
+                "file_extension": file_extension,
+                "resize_method": resize_method,
+            }
+            self._clock_mode = False
 
     # ------------------------------------------------------------------
     # Settings
@@ -133,6 +158,37 @@ class LEDController:
         if not self.client:
             raise RuntimeError("Non connecté au panneau.")
         self.client.set_clock_mode(**kwargs)
+        self._clock_mode = True
+
+    def is_clock_mode(self) -> bool:
+        return self._clock_mode
+
+    def restore_last_content(self):
+        """Restaure le dernier contenu temporaire affiché avant l'horloge."""
+        if self._last_content_state is None:
+            return
+        state = self._last_content_state
+        content_type = state.get("type")
+        if content_type == "image":
+            self.send_image(state["path"], resize_method=state.get("resize_method"))
+        elif content_type == "text":
+            self.send_text(
+                state["text"],
+                animation=state.get("animation"),
+                speed=state.get("speed"),
+                color=state.get("color"),
+                bg_color=state.get("bg_color"),
+                font=state.get("font"),
+            )
+        elif content_type == "image_hex":
+            self.send_image_hex(
+                state["hex_string"],
+                state["file_extension"],
+                resize_method=state.get("resize_method"),
+            )
+        elif content_type == "show_slot":
+            self.show_slot(state["slot"])
+        self._clock_mode = False
 
     def set_time(self, **kwargs):
         if not self.client:
@@ -150,27 +206,28 @@ class LEDController:
         try:
             self.client.show_slot(slot)
             _logger.debug("show_slot(%d) succeeded via pypixelcolor official command", slot)
-            return
         except Exception as exc_official:  # noqa: BLE001
             _logger.warning(
                 "show_slot(%d) failed with official payload (0x08 0x80): %s", slot, exc_official
             )
 
-        # --- tentative 2 : payload corrigé (type=0x01 comme delete) -------
-        async def _exec_raw():
-            session = self.client._async_client._session
-            return await session.execute_command(_build_show_slot_raw, slot)
+            # --- tentative 2 : payload corrigé (type=0x01 comme delete) -------
+            async def _exec_raw():
+                session = self.client._async_client._session
+                return await session.execute_command(_build_show_slot_raw, slot)
 
-        try:
-            self.client._run_async(_exec_raw())
-            _logger.info("show_slot(%d) succeeded with raw corrected payload (0x08 0x01)", slot)
-        except Exception as exc_raw:  # noqa: BLE001
-            _logger.error(
-                "show_slot(%d) also failed with raw corrected payload: %s", slot, exc_raw
-            )
-            raise RuntimeError(
-                f"Impossible d'afficher le slot {slot} (protocole non reconnu par le panneau)."
-            ) from exc_raw
+            try:
+                self.client._run_async(_exec_raw())
+                _logger.info("show_slot(%d) succeeded with raw corrected payload (0x08 0x01)", slot)
+            except Exception as exc_raw:  # noqa: BLE001
+                _logger.error(
+                    "show_slot(%d) also failed with raw corrected payload: %s", slot, exc_raw
+                )
+                raise RuntimeError(
+                    f"Impossible d'afficher le slot {slot} (protocole non reconnu par le panneau)."
+                ) from exc_raw
+        self._last_content_state = {"type": "show_slot", "slot": slot}
+        self._clock_mode = False
 
     def delete(self, slot: int):
         if not self.client:
@@ -181,6 +238,8 @@ class LEDController:
         if not self.client:
             raise RuntimeError("Non connecté au panneau.")
         self.client.clear()
+        self._last_content_state = None
+        self._clock_mode = False
 
     # ------------------------------------------------------------------
     # Scan

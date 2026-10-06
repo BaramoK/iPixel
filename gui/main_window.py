@@ -19,6 +19,7 @@ class MainWindow(tk.Frame):
         self.config = load_config()
         self.controller = LEDController(address=self.config.get("mac_address"))
         self._build_ui()
+        self.settings_tab.refresh_clock_state()
         self._update_status("Déconnecté")
 
     def _build_ui(self):
@@ -78,6 +79,8 @@ class MainWindow(tk.Frame):
         self.notebook.add(self.settings_tab, text="⚙️ Réglages")
         self.notebook.add(self.history_tab, text="🕘 Historique")
 
+        self.notebook.bind("<<NotebookTabChanged>>", self._on_tab_changed)
+
         # --- Barre d'état ---
         self.status_bar = ttk.Label(
             self, text="Prêt", relief=tk.SUNKEN, anchor=tk.W, padding=(5, 2)
@@ -95,7 +98,11 @@ class MainWindow(tk.Frame):
 
     def _on_send_success(self, entry_type: str, label: str, data: dict):
         """Appelé par les onglets Texte/Image pour enregistrer l'envoi dans l'historique."""
+        self.settings_tab.refresh_clock_state()
         self.history_tab.add_entry(entry_type, label, data, status="success")
+
+    def _on_tab_changed(self, event=None):
+        self.settings_tab.refresh_clock_state()
 
     def _on_device_selected(self, event=None):
         val = self.devices_var.get()
