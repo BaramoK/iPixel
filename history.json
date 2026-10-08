@@ -1,50 +1,75 @@
 [
   {
-    "id": "a25558864a87",
-    "timestamp": "2026-10-03 18:33:03",
+    "id": "3447a73c4771",
+    "timestamp": "2026-10-08 11:31:54",
     "type": "image",
-    "label": "tetris.gif",
+    "label": "3447a73c4771.gif",
     "status": "success",
     "data": {
-      "path": "C:/Users/BaramoK/AppData/Roaming/Elgato/StreamDeck/IconPacks/com.vivremotion.gifcollection.sdIconPack/icons/tetris.gif",
-      "resize_method": "FIT",
-      "slot": 0
+      "path": "C:\\Users\\BaramoK\\Documents\\Git\\iPixel-IU-Manager\\history_assets\\1e9fdda6f28d.gif",
+      "resize_method": "CROP",
+      "slot": 1,
+      "stored_path": "C:\\Users\\BaramoK\\Documents\\Git\\iPixel-IU-Manager\\history_assets\\3447a73c4771.gif",
+      "original_path": "C:\\Users\\BaramoK\\Documents\\Git\\iPixel-IU-Manager\\history_assets\\1e9fdda6f28d.gif"
     }
   },
   {
-    "id": "72e26fb7fa7a",
-    "timestamp": "2026-10-03 19:12:46",
+    "id": "779009cc98ed",
+    "timestamp": "2026-10-08 13:21:46",
     "type": "image",
-    "label": "shark.gif",
+    "label": "16e1b5ca2e0e.gif",
     "status": "success",
     "data": {
-      "path": "C:/Users/BaramoK/AppData/Roaming/Elgato/StreamDeck/IconPacks/com.vivremotion.gifcollection.sdIconPack/icons/shark.gif",
-      "resize_method": "FIT",
-      "slot": 0
+      "path": "C:\\Users\\BaramoK\\Documents\\Git\\iPixel-IU-Manager\\history_assets\\16e1b5ca2e0e.gif",
+      "resize_method": "CROP",
+      "slot": 0,
+      "original_path": "C:\\Users\\BaramoK\\Documents\\Git\\iPixel-IU-Manager\\history_assets\\16e1b5ca2e0e.gif",
+      "stored_path": "C:\\Users\\BaramoK\\Documents\\Git\\iPixel-IU-Manager\\history_assets\\779009cc98ed.gif"
     }
   },
   {
-    "id": "32b5465a3d40",
-    "timestamp": "2026-10-03 19:13:00",
+    "id": "daf72e0e2311",
+    "timestamp": "2026-10-08 13:31:36",
     "type": "image",
-    "label": "vertical_lines.gif",
+    "label": "daf72e0e2311.gif",
     "status": "success",
     "data": {
-      "path": "C:/Users/BaramoK/AppData/Roaming/Elgato/StreamDeck/IconPacks/com.vivremotion.gifcollection.sdIconPack/icons/vertical_lines.gif",
-      "resize_method": "FIT",
-      "slot": 0
+      "path": "C:/Users/BaramoK/Documents/Git/iPixel-IU-Manager/history_assets/09f803450596.gif",
+      "resize_method": "CROP",
+      "slot": 0,
+      "stored_path": "C:\\Users\\BaramoK\\Documents\\Git\\iPixel-IU-Manager\\history_assets\\daf72e0e2311.gif",
+      "original_path": "C:/Users/BaramoK/Documents/Git/iPixel-IU-Manager/history_assets/09f803450596.gif"
     }
   },
   {
-    "id": "391058b9a805",
-    "timestamp": "2026-10-03 19:20:24",
+    "id": "388fafdcea0f",
+    "timestamp": "2026-10-08 13:53:08",
     "type": "image",
-    "label": "pong.gif",
+    "label": "388fafdcea0f.gif",
     "status": "success",
     "data": {
-      "path": "C:/Users/BaramoK/AppData/Roaming/Elgato/StreamDeck/IconPacks/com.vivremotion.gifcollection.sdIconPack/icons/pong.gif",
-      "resize_method": "FIT",
-      "slot": 0
+      "path": "C:/Users/BaramoK/Downloads/Gifs/ross-ross-geller.gif",
+      "resize_method": "CROP",
+      "slot": 2,
+      "stored_path": "C:\\Users\\BaramoK\\Documents\\Git\\iPixel-IU-Manager\\history_assets\\388fafdcea0f.gif",
+      "original_path": "C:/Users/BaramoK/Downloads/Gifs/ross-ross-geller.gif"
+    }
+  },
+  {
+    "id": "8b2407701a1f",
+    "timestamp": "2026-10-08 13:54:53",
+    "type": "text",
+    "label": "😎",
+    "status": "success",
+    "data": {
+      "text": "😎",
+      "animation": "STATIC",
+      "speed": 50,
+      "color": "00ff00",
+      "bg_color": "000000",
+      "slot": 2,
+      "font_path": "UNIFONT",
+      "font_size": 8
     }
   }
 ]

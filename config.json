@@ -1,15 +1,15 @@
 {
   "mac_address": "37:67:1D:95:EE:80",
-  "last_text": "(●◡●)",
-  "image_resize": "FIT",
-  "image_slot": 0,
+  "last_text": "😎",
+  "image_resize": "CROP",
+  "image_slot": 2,
   "text_color": "00ff00",
   "text_bg_color": "000000",
-  "text_animation": "SCROLL_LEFT",
+  "text_animation": "STATIC",
   "text_speed": 50,
-  "text_slot": 0,
+  "text_slot": 2,
   "text_font_path": "UNIFONT",
   "text_font_size": 8,
-  "brightness": 30,
+  "brightness": 100,
   "orientation": 0
 }
