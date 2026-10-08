@@ -7,6 +7,8 @@ import os
 
 from pypixelcolor import ResizeMethod
 
+import history_manager as hm
+
 
 class ImageTab(ttk.Frame):
     PREVIEW_SIZE = (200, 200)
@@ -185,7 +187,7 @@ class ImageTab(ttk.Frame):
 
     def populate_from_data(self, data: dict):
         """Charge une image depuis les données d'un historique."""
-        path = data.get("path", "")
+        path = hm.resolve_image_path(data)
         if os.path.isfile(path):
             self._load_image(path)
         else:

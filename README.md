@@ -36,7 +36,7 @@ Avec iPixel, tu peux envoyer des images, afficher du texte animé, régler la lu
 
 🔍 **Scan BLE intégré** — détecte automatiquement les panneaux LED à proximité.
 
-💾 **Persistance** — MAC address, textes, couleurs et réglages sauvegardés entre les sessions.
+💾 **Persistance** — MAC address, textes, couleurs, réglages et **historique rejouable** (images copiées localement) sauvegardés entre les sessions.
 
 ---
 
@@ -136,6 +136,21 @@ python app.py
 
 ⚠️ `clear()` efface **toutes** les données du panneau — utilise avec précaution !
 
+### 🕘 Historique
+
+L'onglet **🕘 Historique** conserve tes envois (texte et image) pour les **rejouer** en un clic.
+
+1. Va dans l'onglet **🕘 Historique**
+2. Sélectionne une entrée puis :
+   - **📂 Charger dans l'onglet** — réinjecte le contenu (et son formatage) dans l'onglet Texte/Image
+   - **🚀 Envoyer directement** — ré-émet immédiatement vers le panneau
+3. **🗑️ Supprimer la sélection** / **💣 Vider tout l'historique** pour nettoyer
+
+> **📦 Entrées autonomes** : chaque image envoyée est **copiée** dans `history_assets/`
+> à côté de `history.json`. Le rejeu fonctionne donc même si le fichier d'origine a
+> été déplacé ou supprimé. Les assets sont nettoyés automatiquement quand une entrée
+> est supprimée (ou devient orpheline). Ce dossier est ignoré par Git.
+
 ---
 
 ## 🏗️ Architecture
@@ -147,6 +162,9 @@ iPixel-UI-Manager/
 ├── requirements.txt        → Dépendances
 ├── config.json             → Configuration & persistance utilisateur
 ├── config_manager.py       → Gestionnaire JSON thread-safe
+├── history.json            → Historique des envois (métadonnées + chemins)
+├── history_manager.py      → Gestion de l'historique + copie des images (history_assets/)
+├── history_assets/         → Copie locale des images (rejeu autonome, ignoré par Git)
 ├── led_client.py           → Wrapper pypixelcolor + ThreadPoolExecutor
 ├── assets/
 │   ├── app_icon.ico        → Icône panneau LED personnalisée (6 résolutions)
@@ -168,7 +186,7 @@ iPixel-UI-Manager/
 | **Marshaling** | Retour au thread principal via `root.after()`. |
 | **Drag & Drop** | [`tkinterdnd2`](https://github.com/Eliav2/tkinterdnd2) — bindings natifs Windows. |
 | **Aperçu** | `Pillow` avec filtre `LANCZOS`. |
-| **Persistance** | `config_manager.py` sauvegarde automatiquement en JSON. |
+| **Persistance** | `config_manager.py` sauvegarde automatiquement en JSON ; `history_manager.py` copie les images dans `history_assets/` pour un rejeu autonome. |
 
 ---
 

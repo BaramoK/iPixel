@@ -126,7 +126,8 @@ class HistoryTab(ttk.Frame):
             self.notebook.select(self.text_tab)
             self.on_status("Chargé dans l'onglet Texte")
         elif entry.get("type") == "image":
-            self.image_tab.populate_from_data(data)
+            hm.ensure_image_asset(entry)
+            self.image_tab.populate_from_data(entry.get("data", {}))
             self.notebook.select(self.image_tab)
             self.on_status("Chargé dans l'onglet Image")
 
@@ -147,7 +148,7 @@ class HistoryTab(ttk.Frame):
                 if entry.get("type") == "text":
                     self._send_text_direct(data)
                 elif entry.get("type") == "image":
-                    self._send_image_direct(data)
+                    self._send_image_direct(entry)
                 return None
             except Exception as e:
                 return e
@@ -181,10 +182,11 @@ class HistoryTab(ttk.Frame):
             color=color, bg_color=bg_color, save_slot=save_slot, font=font,
         )
 
-    def _send_image_direct(self, data: dict):
-        path = data.get("path", "")
-        if not os.path.isfile(path):
-            raise FileNotFoundError(f"Image introuvable : {path}")
+    def _send_image_direct(self, entry: dict):
+        data = entry.get("data", {})
+        path = hm.ensure_image_asset(entry) or hm.resolve_image_path(data)
+        if not path or not os.path.isfile(path):
+            raise FileNotFoundError(f"Image introuvable : {data.get('path', '')}")
         resize_method = ResizeMethod[data.get("resize_method", "FIT")]
         save_slot = data.get("slot") or None
         self.controller.send_image(path, resize_method=resize_method, save_slot=save_slot)
