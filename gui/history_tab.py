@@ -33,7 +33,7 @@ class HistoryTab(ttk.Frame):
         list_frame = ttk.Frame(self)
         list_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=(10, 5))
 
-        columns = ("datetime", "type", "label", "status")
+        columns = ("datetime", "type", "label", "slot", "mode", "status")
         style = ttk.Style(self)
         style.configure("History.Treeview", rowheight=self.THUMB_SIZE[1] + 8)
         self.tree = ttk.Treeview(
@@ -44,12 +44,16 @@ class HistoryTab(ttk.Frame):
         self.tree.heading("datetime", text="Date / Heure")
         self.tree.heading("type", text="Type")
         self.tree.heading("label", text="Contenu")
+        self.tree.heading("slot", text="Slot")
+        self.tree.heading("mode", text="Mode")
         self.tree.heading("status", text="Statut")
         self.tree.column("#0", width=self.THUMB_SIZE[0] + 16,
                          minwidth=self.THUMB_SIZE[0] + 16, stretch=False, anchor="center")
         self.tree.column("datetime", width=130, anchor="w")
         self.tree.column("type", width=80, anchor="center")
-        self.tree.column("label", width=300, anchor="w")
+        self.tree.column("label", width=260, anchor="w")
+        self.tree.column("slot", width=50, anchor="center")
+        self.tree.column("mode", width=70, anchor="center")
         self.tree.column("status", width=60, anchor="center")
 
         scrollbar = ttk.Scrollbar(list_frame, orient=tk.VERTICAL, command=self.tree.yview)
@@ -118,9 +122,22 @@ class HistoryTab(ttk.Frame):
                     entry.get("timestamp", ""),
                     type_icon,
                     label,
+                    self._format_slot(entry),
+                    self._format_mode(entry),
                     entry.get("status", ""),
                 ),
             )
+
+    def _format_slot(self, entry: dict) -> str:
+        """Numéro de slot de sauvegarde (0 ou absent = aucun) → « — »."""
+        slot = (entry.get("data") or {}).get("slot") or 0
+        return str(slot) if slot else "—"
+
+    def _format_mode(self, entry: dict) -> str:
+        """Mode de redimensionnement (images uniquement) : FIT / CROP."""
+        if entry.get("type") != "image":
+            return "—"
+        return (entry.get("data") or {}).get("resize_method") or "FIT"
 
     def _make_thumbnail(self, entry: dict):
         """Génère la miniature d'une entrée image (référence conservée dans _thumb_refs)."""
