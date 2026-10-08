@@ -140,7 +140,7 @@ python app.py
 
 L'onglet **🕘 Historique** conserve tes envois (texte et image) pour les **rejouer** en un clic.
 
-1. Va dans l'onglet **🕘 Historique**
+1. Va dans l'onglet **🕘 Historique** — la colonne **Aperçu** affiche une **miniature** de chaque image
 2. Sélectionne une entrée puis :
    - **📂 Charger dans l'onglet** — réinjecte le contenu (et son formatage) dans l'onglet Texte/Image
    - **🚀 Envoyer directement** — ré-émet immédiatement vers le panneau

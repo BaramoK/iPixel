@@ -83,36 +83,6 @@ def resolve_image_path(data: Dict[str, Any]) -> str:
     return data.get("path", "")
 
 
-def ensure_image_asset(entry: Dict[str, Any]) -> Optional[str]:
-    """Migration paresseuse : copie l'original d'une entrée ancienne.
-
-    Retourne le chemin du fichier copié (ou déjà présent), sinon ``None``.
-    """
-    data = entry.get("data") or {}
-    stored = data.get("stored_path")
-    if stored and os.path.isfile(stored):
-        return stored
-    source = data.get("path")
-    if source and os.path.isfile(source):
-        new_stored = store_image_asset(source, entry.get("id", ""))
-        if new_stored:
-            data.setdefault("original_path", source)
-            data["stored_path"] = new_stored
-            _update_entry(entry.get("id"), data)
-            return new_stored
-    return None
-
-
-def _update_entry(entry_id: str, data: Dict[str, Any]):
-    """Met à jour les données d'une entrée existante."""
-    entries = load_history()
-    for e in entries:
-        if e.get("id") == entry_id:
-            e["data"] = data
-            break
-    save_history(entries)
-
-
 def prune_orphan_assets():
     """Supprime les fichiers du dossier géré non référencés par l'historique."""
     if not os.path.isdir(ASSETS_DIR):

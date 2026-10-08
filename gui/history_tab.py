@@ -3,6 +3,7 @@ import os
 import tkinter as tk
 from tkinter import ttk, messagebox
 
+from PIL import Image, ImageTk
 from pypixelcolor import TextAnimation, ResizeMethod
 from pypixelcolor.lib.font_config import FontConfig
 
@@ -10,6 +11,8 @@ import history_manager as hm
 
 
 class HistoryTab(ttk.Frame):
+    THUMB_SIZE = (40, 40)
+
     def __init__(self, parent, notebook, controller, text_tab, image_tab, on_status):
         super().__init__(parent)
         self.notebook = notebook
@@ -17,6 +20,7 @@ class HistoryTab(ttk.Frame):
         self.text_tab = text_tab
         self.image_tab = image_tab
         self.on_status = on_status
+        self._thumb_refs = {}
 
         self._build_ui()
         self.refresh_list()
@@ -30,13 +34,19 @@ class HistoryTab(ttk.Frame):
         list_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=(10, 5))
 
         columns = ("datetime", "type", "label", "status")
+        style = ttk.Style(self)
+        style.configure("History.Treeview", rowheight=self.THUMB_SIZE[1] + 8)
         self.tree = ttk.Treeview(
-            list_frame, columns=columns, show="headings", selectmode="browse",
+            list_frame, columns=columns, show=("tree", "headings"),
+            selectmode="browse", style="History.Treeview",
         )
+        self.tree.heading("#0", text="Aperçu")
         self.tree.heading("datetime", text="Date / Heure")
         self.tree.heading("type", text="Type")
         self.tree.heading("label", text="Contenu")
         self.tree.heading("status", text="Statut")
+        self.tree.column("#0", width=self.THUMB_SIZE[0] + 16,
+                         minwidth=self.THUMB_SIZE[0] + 16, stretch=False, anchor="center")
         self.tree.column("datetime", width=130, anchor="w")
         self.tree.column("type", width=80, anchor="center")
         self.tree.column("label", width=300, anchor="w")
@@ -93,14 +103,17 @@ class HistoryTab(ttk.Frame):
     def refresh_list(self):
         for item in self.tree.get_children():
             self.tree.delete(item)
+        self._thumb_refs.clear()
         entries = hm.load_history()
         for entry in reversed(entries):
             label = entry.get("label", "")
             if len(label) > 50:
                 label = label[:47] + "..."
             type_icon = "📝" if entry.get("type") == "text" else "🖼️"
+            thumb = self._make_thumbnail(entry)
             self.tree.insert(
                 "", tk.END, iid=entry.get("id"),
+                image=thumb if thumb else "",
                 values=(
                     entry.get("timestamp", ""),
                     type_icon,
@@ -108,6 +121,22 @@ class HistoryTab(ttk.Frame):
                     entry.get("status", ""),
                 ),
             )
+
+    def _make_thumbnail(self, entry: dict):
+        """Génère la miniature d'une entrée image (référence conservée dans _thumb_refs)."""
+        if entry.get("type") != "image":
+            return None
+        path = hm.resolve_image_path(entry.get("data", {}))
+        if not path or not os.path.isfile(path):
+            return None
+        try:
+            img = Image.open(path)
+            img.thumbnail(self.THUMB_SIZE, Image.Resampling.LANCZOS)
+            photo = ImageTk.PhotoImage(img)
+            self._thumb_refs[entry.get("id")] = photo
+            return photo
+        except Exception:
+            return None
 
     # ------------------------------------------------------------------
     # Actions
@@ -126,7 +155,6 @@ class HistoryTab(ttk.Frame):
             self.notebook.select(self.text_tab)
             self.on_status("Chargé dans l'onglet Texte")
         elif entry.get("type") == "image":
-            hm.ensure_image_asset(entry)
             self.image_tab.populate_from_data(entry.get("data", {}))
             self.notebook.select(self.image_tab)
             self.on_status("Chargé dans l'onglet Image")
@@ -148,7 +176,7 @@ class HistoryTab(ttk.Frame):
                 if entry.get("type") == "text":
                     self._send_text_direct(data)
                 elif entry.get("type") == "image":
-                    self._send_image_direct(entry)
+                    self._send_image_direct(data)
                 return None
             except Exception as e:
                 return e
@@ -182,9 +210,8 @@ class HistoryTab(ttk.Frame):
             color=color, bg_color=bg_color, save_slot=save_slot, font=font,
         )
 
-    def _send_image_direct(self, entry: dict):
-        data = entry.get("data", {})
-        path = hm.ensure_image_asset(entry) or hm.resolve_image_path(data)
+    def _send_image_direct(self, data: dict):
+        path = hm.resolve_image_path(data)
         if not path or not os.path.isfile(path):
             raise FileNotFoundError(f"Image introuvable : {data.get('path', '')}")
         resize_method = ResizeMethod[data.get("resize_method", "FIT")]
