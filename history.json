@@ -1,5 +1,349 @@
 [
   {
+    "id": "3af24a8534d6",
+    "timestamp": "2026-10-06 23:19:49",
+    "type": "text",
+    "label": "(●◡●)",
+    "status": "success",
+    "data": {
+      "text": "(●◡●)",
+      "animation": "SCROLL_LEFT",
+      "speed": 50,
+      "color": "00ff00",
+      "bg_color": "000000",
+      "slot": 14,
+      "font_path": "UNIFONT",
+      "font_size": 8
+    }
+  },
+  {
+    "id": "413694fc5f03",
+    "timestamp": "2026-10-06 23:20:04",
+    "type": "text",
+    "label": "(●◡●)",
+    "status": "success",
+    "data": {
+      "text": "(●◡●)",
+      "animation": "SCROLL_LEFT",
+      "speed": 50,
+      "color": "00ff00",
+      "bg_color": "000000",
+      "slot": 14,
+      "font_path": "UNIFONT",
+      "font_size": 8
+    }
+  },
+  {
+    "id": "d71c8f4a2e69",
+    "timestamp": "2026-10-07 00:26:52",
+    "type": "text",
+    "label": "(●◡●)",
+    "status": "success",
+    "data": {
+      "text": "(●◡●)",
+      "animation": "SCROLL_LEFT",
+      "speed": 50,
+      "color": "00ff00",
+      "bg_color": "000000",
+      "slot": 14,
+      "font_path": "UNIFONT",
+      "font_size": 8
+    }
+  },
+  {
+    "id": "d565cf2aba85",
+    "timestamp": "2026-10-07 00:30:34",
+    "type": "text",
+    "label": "(●◡●)",
+    "status": "success",
+    "data": {
+      "text": "(●◡●)",
+      "animation": "SCROLL_LEFT",
+      "speed": 50,
+      "color": "00ff00",
+      "bg_color": "000000",
+      "slot": 14,
+      "font_path": "UNIFONT",
+      "font_size": 8
+    }
+  },
+  {
+    "id": "f78806ba3e15",
+    "timestamp": "2026-10-07 00:33:50",
+    "type": "text",
+    "label": "(●◡●)",
+    "status": "success",
+    "data": {
+      "text": "(●◡●)",
+      "animation": "SCROLL_LEFT",
+      "speed": 50,
+      "color": "00ff00",
+      "bg_color": "000000",
+      "slot": 14,
+      "font_path": "UNIFONT",
+      "font_size": 8
+    }
+  },
+  {
+    "id": "8ad798e5036f",
+    "timestamp": "2026-10-07 00:34:47",
+    "type": "text",
+    "label": "(●◡●)",
+    "status": "success",
+    "data": {
+      "text": "(●◡●)",
+      "animation": "SCROLL_LEFT",
+      "speed": 50,
+      "color": "00ff00",
+      "bg_color": "000000",
+      "slot": 100,
+      "font_path": "UNIFONT",
+      "font_size": 8
+    }
+  },
+  {
+    "id": "8481f8ea5bef",
+    "timestamp": "2026-10-07 00:36:50",
+    "type": "image",
+    "label": "fluorescent_000.gif",
+    "status": "success",
+    "data": {
+      "path": "C:/Users/BaramoK/Downloads/Gifs/fluorescent_000.gif",
+      "resize_method": "FIT",
+      "slot": 1
+    }
+  },
+  {
+    "id": "21ec5a76812a",
+    "timestamp": "2026-10-07 00:37:00",
+    "type": "text",
+    "label": "(●◡●)",
+    "status": "success",
+    "data": {
+      "text": "(●◡●)",
+      "animation": "SCROLL_LEFT",
+      "speed": 50,
+      "color": "00ff00",
+      "bg_color": "000000",
+      "slot": 255,
+      "font_path": "UNIFONT",
+      "font_size": 8
+    }
+  },
+  {
+    "id": "91107b42f39c",
+    "timestamp": "2026-10-07 00:40:18",
+    "type": "image",
+    "label": "kirby-right-back-at-ya.gif",
+    "status": "success",
+    "data": {
+      "path": "C:/Users/BaramoK/Downloads/Gifs/kirby-right-back-at-ya.gif",
+      "resize_method": "FIT",
+      "slot": 1
+    }
+  },
+  {
+    "id": "311387cc41fb",
+    "timestamp": "2026-10-07 00:40:53",
+    "type": "image",
+    "label": "mario-bros-star-star-arcade.gif",
+    "status": "success",
+    "data": {
+      "path": "C:/Users/BaramoK/Downloads/Gifs/mario-bros-star-star-arcade.gif",
+      "resize_method": "FIT",
+      "slot": 7
+    }
+  },
+  {
+    "id": "32837750bd48",
+    "timestamp": "2026-10-07 00:45:29",
+    "type": "image",
+    "label": "kirby-right-back-at-ya.gif",
+    "status": "success",
+    "data": {
+      "path": "C:/Users/BaramoK/Downloads/Gifs/kirby-right-back-at-ya.gif",
+      "resize_method": "FIT",
+      "slot": 1
+    }
+  },
+  {
+    "id": "62a4df99cf70",
+    "timestamp": "2026-10-07 00:45:46",
+    "type": "image",
+    "label": "mario-bros-star-star-arcade.gif",
+    "status": "success",
+    "data": {
+      "path": "C:/Users/BaramoK/Downloads/Gifs/mario-bros-star-star-arcade.gif",
+      "resize_method": "FIT",
+      "slot": 2
+    }
+  },
+  {
+    "id": "198953c4e629",
+    "timestamp": "2026-10-07 00:45:50",
+    "type": "image",
+    "label": "mario-bros-star-star-arcade.gif",
+    "status": "success",
+    "data": {
+      "path": "C:/Users/BaramoK/Downloads/Gifs/mario-bros-star-star-arcade.gif",
+      "resize_method": "FIT",
+      "slot": 2
+    }
+  },
+  {
+    "id": "6b7475979883",
+    "timestamp": "2026-10-07 00:46:16",
+    "type": "text",
+    "label": "(●◡●)",
+    "status": "success",
+    "data": {
+      "text": "(●◡●)",
+      "animation": "SCROLL_LEFT",
+      "speed": 50,
+      "color": "00ff00",
+      "bg_color": "000000",
+      "slot": 255,
+      "font_path": "UNIFONT",
+      "font_size": 8
+    }
+  },
+  {
+    "id": "0423182efe2a",
+    "timestamp": "2026-10-07 00:47:08",
+    "type": "text",
+    "label": "😎",
+    "status": "success",
+    "data": {
+      "text": "😎",
+      "animation": "SCROLL_LEFT",
+      "speed": 50,
+      "color": "00ff00",
+      "bg_color": "000000",
+      "slot": 255,
+      "font_path": "UNIFONT",
+      "font_size": 8
+    }
+  },
+  {
+    "id": "80d982231e35",
+    "timestamp": "2026-10-07 00:47:11",
+    "type": "text",
+    "label": "😎",
+    "status": "success",
+    "data": {
+      "text": "😎",
+      "animation": "STATIC",
+      "speed": 50,
+      "color": "00ff00",
+      "bg_color": "000000",
+      "slot": 255,
+      "font_path": "UNIFONT",
+      "font_size": 8
+    }
+  },
+  {
+    "id": "2d92de5dc3e5",
+    "timestamp": "2026-10-07 00:47:45",
+    "type": "text",
+    "label": "😎",
+    "status": "success",
+    "data": {
+      "text": "😎",
+      "animation": "STATIC",
+      "speed": 50,
+      "color": "00ff00",
+      "bg_color": "000000",
+      "slot": 255,
+      "font_path": "UNIFONT",
+      "font_size": 8
+    }
+  },
+  {
+    "id": "7abcef931dcb",
+    "timestamp": "2026-10-07 00:47:52",
+    "type": "text",
+    "label": "😎",
+    "status": "success",
+    "data": {
+      "text": "😎",
+      "animation": "STATIC",
+      "speed": 50,
+      "color": "00ff00",
+      "bg_color": "000000",
+      "slot": 100,
+      "font_path": "UNIFONT",
+      "font_size": 8
+    }
+  },
+  {
+    "id": "1ac681d8fb05",
+    "timestamp": "2026-10-07 00:48:13",
+    "type": "text",
+    "label": "😎",
+    "status": "success",
+    "data": {
+      "text": "😎",
+      "animation": "STATIC",
+      "speed": 50,
+      "color": "00ff00",
+      "bg_color": "000000",
+      "slot": 101,
+      "font_path": "UNIFONT",
+      "font_size": 8
+    }
+  },
+  {
+    "id": "89e90362f30f",
+    "timestamp": "2026-10-07 01:07:12",
+    "type": "text",
+    "label": "😎",
+    "status": "success",
+    "data": {
+      "text": "😎",
+      "animation": "STATIC",
+      "speed": 50,
+      "color": "00ff00",
+      "bg_color": "000000",
+      "slot": 99,
+      "font_path": "UNIFONT",
+      "font_size": 8
+    }
+  },
+  {
+    "id": "a556860fe8ab",
+    "timestamp": "2026-10-07 01:08:03",
+    "type": "text",
+    "label": "👾",
+    "status": "success",
+    "data": {
+      "text": "👾",
+      "animation": "STATIC",
+      "speed": 50,
+      "color": "00ff00",
+      "bg_color": "000000",
+      "slot": 98,
+      "font_path": "UNIFONT",
+      "font_size": 8
+    }
+  },
+  {
+    "id": "1008b437d26c",
+    "timestamp": "2026-10-07 01:08:15",
+    "type": "text",
+    "label": "👽",
+    "status": "success",
+    "data": {
+      "text": "👽",
+      "animation": "STATIC",
+      "speed": 50,
+      "color": "00ff00",
+      "bg_color": "000000",
+      "slot": 97,
+      "font_path": "UNIFONT",
+      "font_size": 8
+    }
+  },
+  {
     "id": "3447a73c4771",
     "timestamp": "2026-10-08 11:31:54",
     "type": "image",

@@ -11,5 +11,9 @@
   "text_font_path": "UNIFONT",
   "text_font_size": 8,
   "brightness": 100,
-  "orientation": 0
+  "orientation": 0,
+  "clock_style": 8,
+  "clock_24h": true,
+  "clock_date": false,
+  "exit_clock_slot": 100
 }

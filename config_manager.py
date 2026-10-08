@@ -24,6 +24,10 @@ DEFAULT_CONFIG = {
     "text_font_size": 16,
     "brightness": 50,
     "orientation": 0,
+    "clock_style": 1,
+    "clock_24h": True,
+    "clock_date": True,
+    "exit_clock_slot": 100,
 }
 
 

@@ -76,7 +76,7 @@ class ImageTab(ttk.Frame):
         # Save slot
         ttk.Label(right, text="Slot de sauvegarde (0 = aucun)").pack(anchor=tk.W, pady=(10, 2))
         self.slot_var = tk.IntVar(value=0)
-        self.slot_spin = ttk.Spinbox(right, from_=0, to_=20, textvariable=self.slot_var, width=10)
+        self.slot_spin = ttk.Spinbox(right, from_=0, to_=99, textvariable=self.slot_var, width=10)
         self.slot_spin.pack(anchor=tk.W)
 
         # Chemin

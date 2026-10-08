@@ -64,14 +64,15 @@ class SettingsTab(ttk.Frame):
         self.clock_date = tk.BooleanVar(value=True)
         ttk.Checkbutton(clock_frame, text="Afficher date", variable=self.clock_date).grid(row=2, column=0, columnspan=2, sticky=tk.W)
 
-        ttk.Button(clock_frame, text="Activer horloge", command=self._activate_clock).grid(row=3, column=0, columnspan=2, pady=(10, 0), sticky=tk.EW)
+        self.clock_btn = ttk.Button(clock_frame, text="Activer horloge", command=self._toggle_clock)
+        self.clock_btn.grid(row=3, column=0, columnspan=2, pady=(10, 0), sticky=tk.EW)
 
         slot_frame = ttk.LabelFrame(right, text=" Gestion des slots ", padding=10)
         slot_frame.pack(fill=tk.X, pady=(0, 10))
 
         ttk.Label(slot_frame, text="Numéro slot").grid(row=0, column=0, sticky=tk.W)
         self.slot_num = tk.IntVar(value=1)
-        ttk.Spinbox(slot_frame, from_=1, to_=20, textvariable=self.slot_num, width=8).grid(row=0, column=1, padx=4)
+        ttk.Spinbox(slot_frame, from_=1, to_=99, textvariable=self.slot_num, width=8).grid(row=0, column=1, padx=4)
 
         ttk.Button(slot_frame, text="▶ Afficher slot", command=self._show_slot).grid(row=1, column=0, columnspan=2, sticky=tk.EW, pady=(8, 4))
         ttk.Button(slot_frame, text="🗑️ Supprimer slot", command=self._delete_slot).grid(row=2, column=0, columnspan=2, sticky=tk.EW)
@@ -140,17 +141,31 @@ class SettingsTab(ttk.Frame):
             "Alimentation modifiée.",
         )
 
-    def _activate_clock(self):
-        kwargs = {
-            "style": self.clock_style.get(),
-            "format_24": self.clock_24h.get(),
-            "show_date": self.clock_date.get(),
-        }
-        self._run_task(
-            lambda: self.controller.set_clock_mode(**kwargs),
-            "Activation horloge…",
-            "Horloge activée.",
-        )
+    def _toggle_clock(self):
+        if self.controller.is_clock_mode():
+            self._run_task(
+                lambda: self.controller.exit_clock_mode(),
+                "Sortie du mode horloge…",
+                "Horloge désactivée – retour au contenu personnalisé.",
+            )
+        else:
+            kwargs = {
+                "style": self.clock_style.get(),
+                "format_24": self.clock_24h.get(),
+                "show_date": self.clock_date.get(),
+            }
+            self._run_task(
+                lambda: self.controller.set_clock_mode(**kwargs),
+                "Activation horloge…",
+                "Horloge activée.",
+            )
+        self.after(500, self.refresh_clock_state)
+
+    def refresh_clock_state(self):
+        if self.controller.is_clock_mode():
+            self.clock_btn.config(text="Désactiver horloge")
+        else:
+            self.clock_btn.config(text="Activer horloge")
 
     def _show_slot(self):
         slot = self.slot_num.get()
@@ -204,7 +219,13 @@ class SettingsTab(ttk.Frame):
     def _load_config(self):
         self.bright_var.set(self.config.get("brightness", 50))
         self.orient_var.set(self.config.get("orientation", 0))
+        self.clock_style.set(self.config.get("clock_style", 1))
+        self.clock_24h.set(self.config.get("clock_24h", True))
+        self.clock_date.set(self.config.get("clock_date", True))
 
     def _save_config(self):
         self.config["brightness"] = self.bright_var.get()
         self.config["orientation"] = self.orient_var.get()
+        self.config["clock_style"] = self.clock_style.get()
+        self.config["clock_24h"] = self.clock_24h.get()
+        self.config["clock_date"] = self.clock_date.get()
