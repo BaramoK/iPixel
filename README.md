@@ -22,6 +22,8 @@ Avec iPixel, tu peux envoyer des images, afficher du texte animé, régler la lu
 
 💡 **Note sur les slots** : le rappel de slot (`show_slot`) intègre un workaround pour un bug du payload BLE upstream — le changement s'effectuera à la fin du cycle si du texte défile.
 
+> **Slots réservés** : les slots de contenu vont de `0` à `99`. Le slot **`100`** est réservé à la sortie du mode horloge (contournement firmware, voir [Réglages avancés](#réglages-avancés)).
+
 ---
 
 ## ⚙️ Fonctionnalités
@@ -30,7 +32,7 @@ Avec iPixel, tu peux envoyer des images, afficher du texte animé, régler la lu
 |-----------|----------|-------------|
 | Glisser-déposer depuis l'explorateur | Texte personnalisé avec couleurs | Luminosité (0–100%) |
 | Aperçu en temps réel | Animations : scroll, blink, fade, snowflake | Orientation 0°/90°/180°/270° |
-| Redimensionnement CROP / FIT | Vitesses de défilement | Mode horloge configurable |
+| Redimensionnement CROP / FIT | Vitesses de défilement | Horloge : activer / désactiver |
 | Sauvegarde dans les slots | Couleurs inline `[#RRGGBB]…[/]` | Allumer / Éteindre |
 | Formats PNG, JPG, BMP, GIF | Polices personnalisables | Gestion des slots mémoire |
 
@@ -131,8 +133,14 @@ python app.py
 ### Réglages avancés
 
 1. Va dans l'onglet **⚙️ Réglages**
-2. Règle la luminosité, l'orientation, configure l'horloge
-3. Gère tes slots : affiche ou supprime du contenu enregistré
+2. Règle la luminosité, l'orientation, allume / éteint le panneau
+3. Configure l'horloge (style, format 24h, date) puis **active / désactive** le mode horloge
+4. Gère tes slots : affiche ou supprime du contenu enregistré
+
+> **🕐 Toggle horloge** : le bouton **Activer horloge** / **Désactiver horloge** bascule
+> entre le canal horloge et le canal personnalisé. À la désactivation, le dernier
+> contenu temporaire (image ou texte **non** enregistré en slot) est **restauré
+> automatiquement** — tu retrouves l'affichage précédent au lieu d'un écran vide.
 
 ⚠️ `clear()` efface **toutes** les données du panneau — utilise avec précaution !
 
@@ -166,9 +174,10 @@ L'onglet **🕘 Historique** conserve tes envois (texte et image) pour les **rej
 ```
 iPixel-UI-Manager/
 ├── app.py                  → Point d'entrée (TkinterDnD.Tk)
+├── analyze_payload.py      → Outil de debug : décodage des payloads BLE (hors app)
 ├── iPixel-UI-Manager.spec  → Configuration PyInstaller (build --onefile)
 ├── requirements.txt        → Dépendances
-├── config.json             → Configuration & persistance utilisateur
+├── config.json             → Configuration & persistance utilisateur (dont exit_clock_slot)
 ├── config_manager.py       → Gestionnaire JSON thread-safe
 ├── history.json            → Historique des envois (métadonnées + chemins)
 ├── history_manager.py      → Historique : ajout / mise à jour sans doublon + copie des images (history_assets/)
@@ -215,6 +224,7 @@ iPixel-UI-Manager/
 ## ⚠️ Notes importantes
 
 - Le **mode slot** (`save_slot`) peut provoquer des *bootloops* si les données sont corrompues. **Teste sans slot d'abord.**
+- Le **slot `100`** est **réservé** à la sortie du mode horloge (contournement firmware) : n'y enregistre jamais de contenu, les slots utilisateur vont de `0` à `99`.
 - `clear()` supprime **toutes** les données et réglages du panneau sans retour possible.
 - Ton panneau doit être **allumé et en mode BLE** — déconnecte-le de toute autre application (smartphone) avant d'utiliser iPixel.
 
