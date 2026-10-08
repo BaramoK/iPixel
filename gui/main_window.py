@@ -93,9 +93,11 @@ class MainWindow(tk.Frame):
         else:
             self.status_bar.config(foreground="black")
 
-    def _on_send_success(self, entry_type: str, label: str, data: dict):
+    def _on_send_success(self, entry_type: str, label: str, data: dict, source_entry_id=None):
         """Appelé par les onglets Texte/Image pour enregistrer l'envoi dans l'historique."""
-        self.history_tab.add_entry(entry_type, label, data, status="success")
+        self.history_tab.add_entry(
+            entry_type, label, data, status="success", source_entry_id=source_entry_id
+        )
 
     def _on_device_selected(self, event=None):
         val = self.devices_var.get()

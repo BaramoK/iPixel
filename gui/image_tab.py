@@ -20,6 +20,8 @@ class ImageTab(ttk.Frame):
         self.config = config
         self.on_status = on_status
         self.on_send_success = on_send_success
+        # Id de l'entrée d'historique rechargée (None si contenu neuf)
+        self.source_entry_id = None
         self.current_path = None
         self._photo = None
 
@@ -100,6 +102,7 @@ class ImageTab(ttk.Frame):
         if os.path.isfile(path):
             ext = os.path.splitext(path)[1].lower()
             if ext in self.SUPPORTED_EXT:
+                self.source_entry_id = None
                 self._load_image(path)
             else:
                 messagebox.showwarning("Format non supporté", f"Extension '{ext}' non prise en charge.")
@@ -124,6 +127,7 @@ class ImageTab(ttk.Frame):
 
     def _clear(self):
         self.current_path = None
+        self.source_entry_id = None
         self.path_label.config(text="Aucune image")
         self.preview_label.config(image="")
         self._photo = None
@@ -169,6 +173,7 @@ class ImageTab(ttk.Frame):
                             "resize_method": self.resize_var.get(),
                             "slot": self.slot_var.get(),
                         },
+                        self.source_entry_id,
                     )
 
         fut = self.controller.submit(task)
@@ -185,8 +190,12 @@ class ImageTab(ttk.Frame):
         self.config["image_resize"] = self.resize_var.get()
         self.config["image_slot"] = self.slot_var.get()
 
-    def populate_from_data(self, data: dict):
-        """Charge une image depuis les données d'un historique."""
+    def populate_from_data(self, data: dict, entry_id=None):
+        """Charge une image depuis les données d'un historique.
+
+        ``entry_id`` (optionnel) mémorise l'entrée d'origine afin de la mettre
+        à jour au prochain envoi plutôt que de créer un doublon.
+        """
         path = hm.resolve_image_path(data)
         if os.path.isfile(path):
             self._load_image(path)
@@ -195,3 +204,4 @@ class ImageTab(ttk.Frame):
             self.on_status(f"Image introuvable : {path}", error=True)
         self.resize_var.set(data.get("resize_method", "FIT"))
         self.slot_var.set(data.get("slot", 0))
+        self.source_entry_id = entry_id

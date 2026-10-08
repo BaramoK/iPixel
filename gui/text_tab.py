@@ -15,6 +15,8 @@ class TextTab(ttk.Frame):
         self.config = config
         self.on_status = on_status
         self.on_send_success = on_send_success
+        # Id de l'entrée d'historique rechargée (None si contenu neuf)
+        self.source_entry_id = None
 
         self._build_ui()
         self._load_config()
@@ -226,6 +228,7 @@ class TextTab(ttk.Frame):
 
     def _clear(self):
         self._set_text("")
+        self.source_entry_id = None
         self.on_status("Texte effacé")
 
     def _on_send(self):
@@ -293,6 +296,7 @@ class TextTab(ttk.Frame):
                             "font_path": self.font_path_var.get(),
                             "font_size": self.font_size_var.get(),
                         },
+                        self.source_entry_id,
                     )
 
         fut = self.controller.submit(task)
@@ -321,8 +325,12 @@ class TextTab(ttk.Frame):
         self.config["text_font_path"] = self.font_path_var.get()
         self.config["text_font_size"] = self.font_size_var.get()
 
-    def populate_from_data(self, data: dict):
-        """Pré-remplit l'onglet avec les données d'un historique."""
+    def populate_from_data(self, data: dict, entry_id=None):
+        """Pré-remplit l'onglet avec les données d'un historique.
+
+        ``entry_id`` (optionnel) mémorise l'entrée d'origine afin de la mettre
+        à jour au prochain envoi plutôt que de créer un doublon.
+        """
         self._set_text(data.get("text", ""))
         self.color_var.set(data.get("color", "00ff00"))
         self.bg_var.set(data.get("bg_color", "000000"))
@@ -332,3 +340,4 @@ class TextTab(ttk.Frame):
         font_path = data.get("font_path", self._default_font())
         self.font_path_var.set(font_path if font_path else self._default_font())
         self.font_size_var.set(data.get("font_size", 16))
+        self.source_entry_id = entry_id

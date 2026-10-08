@@ -151,11 +151,11 @@ class HistoryTab(ttk.Frame):
             return
         data = entry.get("data", {})
         if entry.get("type") == "text":
-            self.text_tab.populate_from_data(data)
+            self.text_tab.populate_from_data(data, entry.get("id"))
             self.notebook.select(self.text_tab)
             self.on_status("Chargé dans l'onglet Texte")
         elif entry.get("type") == "image":
-            self.image_tab.populate_from_data(entry.get("data", {}))
+            self.image_tab.populate_from_data(data, entry.get("id"))
             self.notebook.select(self.image_tab)
             self.on_status("Chargé dans l'onglet Image")
 
@@ -240,8 +240,17 @@ class HistoryTab(ttk.Frame):
             self.refresh_list()
             self.on_status("Historique vidé")
 
-    def add_entry(self, entry_type: str, label: str, data: dict, status: str = "success"):
-        """Ajoute une entrée et rafraîchit la liste."""
-        hm.add_entry(entry_type, label, data, status=status)
+    def add_entry(self, entry_type: str, label: str, data: dict,
+                  status: str = "success", source_entry_id=None):
+        """Ajoute ou met à jour une entrée puis rafraîchit la liste.
+
+        Si ``source_entry_id`` est fourni (envoi d'un élément rechargé depuis
+        l'historique), l'entrée existante est mise à jour au lieu d'être
+        dupliquée (timestamp et position conservés).
+        """
+        if source_entry_id:
+            hm.update_entry(source_entry_id, entry_type, label, data, status=status)
+        else:
+            hm.add_entry(entry_type, label, data, status=status)
         self.refresh_list()
 

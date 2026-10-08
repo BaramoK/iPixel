@@ -151,6 +151,12 @@ L'onglet **🕘 Historique** conserve tes envois (texte et image) pour les **rej
 > été déplacé ou supprimé. Les assets sont nettoyés automatiquement quand une entrée
 > est supprimée (ou devient orpheline). Ce dossier est ignoré par Git.
 
+> **♻️ Pas de doublon au rejeu** : si tu recharges une entrée dans son onglet
+> (**📂 Charger dans l'onglet**) puis la renvoies, l'entrée **d'origine est mise à jour**
+> — même `id`, même horodatage, même place dans la liste — au lieu d'en créer une
+> nouvelle. L'asset copié est réutilisé (aucune nouvelle copie). Un envoi « neuf »
+> (contenu non issu de l'historique) crée toujours une nouvelle entrée.
+
 ---
 
 ## 🏗️ Architecture
@@ -163,7 +169,7 @@ iPixel-UI-Manager/
 ├── config.json             → Configuration & persistance utilisateur
 ├── config_manager.py       → Gestionnaire JSON thread-safe
 ├── history.json            → Historique des envois (métadonnées + chemins)
-├── history_manager.py      → Gestion de l'historique + copie des images (history_assets/)
+├── history_manager.py      → Historique : ajout / mise à jour sans doublon + copie des images (history_assets/)
 ├── history_assets/         → Copie locale des images (rejeu autonome, ignoré par Git)
 ├── led_client.py           → Wrapper pypixelcolor + ThreadPoolExecutor
 ├── assets/

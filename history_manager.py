@@ -133,6 +133,50 @@ def add_entry(entry_type: str, label: str, data: Dict[str, Any], status: str = "
     return entry
 
 
+def _same_path(path_a: str, path_b: str) -> bool:
+    """Compare deux chemins de fichiers (insensible à la casse sous Windows)."""
+    try:
+        return os.path.normcase(os.path.abspath(path_a)) == os.path.normcase(os.path.abspath(path_b))
+    except Exception:
+        return False
+
+
+def update_entry(entry_id: str, entry_type: str, label: str,
+                 data: Dict[str, Any], status: str = "success") -> Optional[Dict[str, Any]]:
+    """Met à jour une entrée existante au lieu d'en créer une nouvelle.
+
+    Le ``timestamp`` et la position dans la liste sont conservés. Pour les
+    images, l'asset déjà copié est réutilisé (aucune nouvelle copie) et le
+    chemin d'origine est restauré si l'onglet a rechargé depuis l'asset.
+    Si l'entrée est introuvable, un nouvel ajout est effectué.
+    """
+    entries = load_history()
+    for entry in entries:
+        if entry.get("id") != entry_id:
+            continue
+        new_data = dict(data or {})
+        if entry_type == "image":
+            existing = entry.get("data") or {}
+            stored = existing.get("stored_path")
+            if stored and os.path.isfile(stored):
+                new_data["stored_path"] = stored
+                new_data["original_path"] = existing.get(
+                    "original_path", existing.get("path")
+                )
+                incoming = new_data.get("path")
+                # L'onglet a rechargé depuis l'asset : on restaure le chemin d'origine
+                if incoming and _same_path(incoming, stored):
+                    new_data["path"] = existing.get("path", incoming)
+        entry["type"] = entry_type
+        entry["label"] = label
+        entry["status"] = status
+        entry["data"] = new_data
+        save_history(entries)
+        prune_orphan_assets()
+        return entry
+    return add_entry(entry_type, label, data, status=status)
+
+
 def remove_entry(entry_id: str) -> bool:
     """Supprime une entrée par son ID (et son asset associé)."""
     entries = load_history()
